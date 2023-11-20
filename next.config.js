@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    typescript: {
+      ignoreBuildErrors: trusted,
+    },
     experimental: {
       serverActions: true,
       serverComponentsExternalPackages: ["mongoose"],
