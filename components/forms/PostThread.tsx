@@ -17,6 +17,7 @@ import { Textarea } from "../ui/textarea";
 import { usePathname, useRouter } from "next/navigation";
 
 import { ThreadValidation } from "@/lib/validations/thread";
+import { createThread } from "@/lib/actions/thread.actions";
 // import { updateUser } from "@/lib/actions/user.actions";
 
 const formSchema = z.object({
@@ -25,17 +26,6 @@ const formSchema = z.object({
   }),
 })
 
-interface Props {
-    user: {
-        id: string;
-        objectId: string;
-        username: string;
-        name: string;
-        bio: string;
-        image: string;
-    }
-    btnTitle: string;
-}
 
 export default function PostThread({ userId }: { userId: string }) {
     const router = useRouter()
@@ -49,9 +39,16 @@ export default function PostThread({ userId }: { userId: string }) {
     }
     })
 
-    const onSubmit = async () => {
-        //await createThread()
+    const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+        await createThread({
+            text: values.thread,
+            author: userId,
+            communityId: null,
+            path: pathname
+        })
+        router.push("/")
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 flex flex-col justify-start gap-10">
